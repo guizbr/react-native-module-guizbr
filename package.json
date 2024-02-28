@@ -1,6 +1,6 @@
 {
   "name": "react-native-module-guizbr",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "testew",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
