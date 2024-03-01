@@ -17,6 +17,6 @@ const ModuleGuizbr = NativeModules.ModuleGuizbr
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return ModuleGuizbr.multiply(a, b);
+export function openCamera(): Promise<any> {
+  return ModuleGuizbr.openCamera();
 }
