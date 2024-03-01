@@ -17,6 +17,6 @@ const ModuleGuizbr = NativeModules.ModuleGuizbr
       }
     );
 
-export function openCamera(): Promise<any> {
-  return ModuleGuizbr.openCamera();
+export function isHeadphonesConnected(): Promise<any> {
+  return ModuleGuizbr.isHeadphonesConnected();
 }

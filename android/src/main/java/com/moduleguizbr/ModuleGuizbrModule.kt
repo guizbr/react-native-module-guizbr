@@ -3,9 +3,13 @@ package com.moduleguizbr
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioManager
+import android.os.Build
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.ReactApplicationContext
@@ -27,28 +31,11 @@ class ModuleGuizbrModule(reactContext: ReactApplicationContext) :
     return NAME
   }
 
+  @RequiresApi(Build.VERSION_CODES.M)
   @ReactMethod
-  fun openCamera(promise: Promise) {
-    val currentActivity = currentActivity
-    if (currentActivity != null) {
-      if (ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-        startCamera(currentActivity)
-        promise.resolve("Camera opened successfully")
-      } else {
-        ActivityCompat.requestPermissions(currentActivity, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
-      }
-    } else {
-      promise.reject("ACTIVITY_ERROR", "No current activity available")
-    }
-  }
-
-  @SuppressLint("QueryPermissionsNeeded")
-  private fun startCamera(activity: Activity) {
-    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-    try {
-      activity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-    } catch (e: IOException) {
-      // Handle error
-    }
+  fun isHeadphonesConnected(promise: Promise) {
+    val audioManager = reactApplicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val isConnected = audioManager.getDevices(0);
+    promise.resolve(isConnected.size)
   }
 }
