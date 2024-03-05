@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { isHeadphonesConnected } from 'react-native-module-guizbr';
 
 export default function App() {
-  const [result, setResult] = React.useState<string | undefined>();
+  const [result, setResult] = React.useState<String | undefined>();
 
   return (
     <View style={styles.container}>
