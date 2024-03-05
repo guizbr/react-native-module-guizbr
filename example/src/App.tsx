@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { isHeadphonesConnected } from 'react-native-module-guizbr';
+import { isHeadphonesConnected, multiply } from 'react-native-module-guizbr';
 
 export default function App() {
   const [result, setResult] = React.useState<any>();
@@ -17,10 +17,22 @@ export default function App() {
       });
   }
 
+  function teste2() {
+    multiply(1, 2)
+      .then((val) => setResult(val))
+      .catch((error) => {
+        console.error('Erro ao verificar conexão do fone de ouvido:', error);
+        setResult('Erro ao verificar conexão do fone de ouvido');
+      });
+  }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => teste()}>
         <Text style={{ color: '#000' }}>BOTAO</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => teste2()}>
+        <Text style={{ color: '#000' }}>BOTAO2</Text>
       </TouchableOpacity>
       <Text>Result: {result}</Text>
     </View>

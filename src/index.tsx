@@ -20,3 +20,7 @@ const ModuleGuizbr = NativeModules.ModuleGuizbr
 export function isHeadphonesConnected(): Promise<any> {
   return ModuleGuizbr.isHeadphonesConnected();
 }
+
+export function multiply(a: number, b: number): Promise<number> {
+  return ModuleGuizbr.multiply(a, b);
+}
