@@ -47,7 +47,7 @@ class ModuleGuizbrModule(reactContext: ReactApplicationContext) :
         a += isConnectedOutput[i].productName.toString() + " | ";
       }
       promise.resolve(a)
-    } catch (e: IOException) {
+    } catch (e: Exception) {
       promise.reject(e.message)
     }
   }
