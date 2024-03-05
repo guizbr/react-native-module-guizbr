@@ -35,7 +35,16 @@ class ModuleGuizbrModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun isHeadphonesConnected(promise: Promise) {
     val audioManager = reactApplicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    val isConnected = audioManager.getDevices(0);
-    promise.resolve(isConnected.size)
+    val isConnectedInput = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS);
+    val isConnectedOutput = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
+    var a = "INPUT | ";
+    for (i in isConnectedInput.indices) {
+      a += isConnectedInput[i].productName.toString() + " | ";
+    }
+    a += "OUTPUT | ";
+    for (i in isConnectedOutput.indices) {
+      a += isConnectedOutput[i].productName.toString() + " | ";
+    }
+    promise.resolve(a)
   }
 }
