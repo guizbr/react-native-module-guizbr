@@ -1,10 +1,27 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { isHeadphonesConnected, multiply } from 'react-native-module-guizbr';
+import {
+  isHeadphonesConnected,
+  multiply,
+  subscribeToMediaButtonEvent,
+  unsubscribeFromMediaButtonEvent,
+} from 'react-native-module-guizbr';
 
 export default function App() {
   const [result, setResult] = React.useState<any>();
+
+  React.useEffect(() => {
+    const handleMediaButtonClicked = (data: any) => {
+      console.log('Media button clicked:', data);
+    };
+
+    subscribeToMediaButtonEvent(handleMediaButtonClicked);
+
+    return () => {
+      unsubscribeFromMediaButtonEvent();
+    };
+  }, []);
 
   function teste() {
     isHeadphonesConnected()

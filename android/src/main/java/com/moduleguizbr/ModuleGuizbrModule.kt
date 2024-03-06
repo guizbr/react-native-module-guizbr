@@ -3,12 +3,15 @@ package com.moduleguizbr
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.os.Build
 import android.provider.MediaStore
+import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -16,6 +19,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import java.io.IOException
 
 class ModuleGuizbrModule(reactContext: ReactApplicationContext) :
@@ -55,5 +59,39 @@ class ModuleGuizbrModule(reactContext: ReactApplicationContext) :
     } catch (e: Exception) {
       promise.reject(e.message)
     }
+  }
+
+
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  @ReactMethod
+  fun registerMediaButtonEvent() {
+    val receiver = object : BroadcastReceiver() {
+      override fun onReceive(context: Context?, intent: Intent?) {
+        if (intent?.action == Intent.ACTION_MEDIA_BUTTON) {
+          val event = intent.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT)
+          if (event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
+            // Emitir evento para o JavaScript
+            reactApplicationContext
+              .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+              .emit("MediaButtonClicked", "clicado")
+          }
+        }
+      }
+    }
+
+    val filter = IntentFilter(Intent.ACTION_MEDIA_BUTTON)
+    reactApplicationContext.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+  }
+
+  @ReactMethod
+  fun unregisterMediaButtonEvent() {
+    val receiver = object : BroadcastReceiver() {
+      override fun onReceive(context: Context?, intent: Intent?) {
+        // Não é necessário fazer nada aqui, apenas serve para desregistrar o receptor
+      }
+    }
+
+    val filter = IntentFilter(Intent.ACTION_MEDIA_BUTTON)
+    reactApplicationContext.unregisterReceiver(receiver)
   }
 }
